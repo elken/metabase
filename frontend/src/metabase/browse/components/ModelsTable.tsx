@@ -7,6 +7,7 @@ import {
 import { push } from "react-router-redux";
 import { t } from "ttag";
 
+import { getCollectionName } from "metabase/collections/utils";
 import EntityItem from "metabase/components/EntityItem";
 import { SortableColumnHeader } from "metabase/components/ItemsTable/BaseItemsTable";
 import {
@@ -35,7 +36,7 @@ import { SortDirection, type SortingOptions } from "metabase-types/api/sorting";
 
 import { trackModelClick } from "../analytics";
 import type { ModelResult } from "../types";
-import { getCollectionName, getIcon } from "../utils";
+import { getIcon } from "../utils";
 
 import {
   CollectionBreadcrumbsWithTooltip,
