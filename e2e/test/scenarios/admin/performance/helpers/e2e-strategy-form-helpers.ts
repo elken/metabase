@@ -29,7 +29,7 @@ export const saveCacheStrategyForm = (options?: {
 };
 
 export const cacheStrategyForm = () =>
-  cy.findByLabelText("Select the cache invalidation policy");
+  cy.findByRole("form", { name: "Select the cache invalidation policy" });
 
 export const cacheStrategyRadioButton = (name: RegExp) =>
   cacheStrategyForm().findByRole("radio", { name });
@@ -50,7 +50,6 @@ export const formLauncher = (
     | "currently inheriting the default policy",
   strategyLabel = "",
 ) => {
-  databaseCachingSettingsPage().should("exist");
   const regExp = new RegExp(`Edit.*${itemName}.*${preface}.*${strategyLabel}`);
   cy.log(`Finding strategy for launcher for regular expression: ${regExp}`);
   const launcher = databaseCachingSettingsPage().findByLabelText(regExp);
@@ -58,13 +57,16 @@ export const formLauncher = (
   return launcher;
 };
 
+/** Opens the strategy form on 'Database caching settings' tab */
 export const openStrategyFormForDatabaseOrDefaultPolicy = (
   /** To open the form for the default policy, set this parameter to "default policy" */
   databaseNameOrDefaultPolicy: string,
   currentStrategyLabel?: string,
 ) => {
   cy.visit("/admin/performance");
-  cy.findByRole("tab", { name: "Database caching settings" }).click();
+  cy.findByRole("tablist")
+    .get("[aria-selected]")
+    .contains("Database caching settings");
   cy.log(`Open strategy form for ${databaseNameOrDefaultPolicy}`);
   formLauncher(
     databaseNameOrDefaultPolicy,

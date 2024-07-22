@@ -14,7 +14,7 @@ import {
   Breadcrumb,
   BreadcrumbGroup,
   CollectionBreadcrumbsWrapper,
-  CollectionLink,
+  CollectionMaybeLink,
   CollectionsIcon,
   InitialEllipsis,
 } from "./CollectionBreadcrumbsWithTooltip.styled";
@@ -25,9 +25,11 @@ import { getBreadcrumbMaxWidths, getCollectionPathString } from "./utils";
 export const CollectionBreadcrumbsWithTooltip = ({
   collection,
   containerName,
+  isLink = true,
 }: {
   collection: CollectionEssentials;
   containerName: string;
+  isLink?: boolean;
 }) => {
   const collections = (
     (collection.effective_ancestors as CollectionEssentials[]) || []
@@ -82,7 +84,9 @@ export const CollectionBreadcrumbsWithTooltip = ({
         name={containerName}
         w="auto"
       >
-        <CollectionLink to={Urls.collection(collection)}>
+        <CollectionMaybeLink
+          to={isLink ? Urls.collection(collection) : undefined}
+        >
           <Flex
             align="center"
             w="100%"
@@ -131,7 +135,7 @@ export const CollectionBreadcrumbsWithTooltip = ({
               );
             })}
           </Flex>
-        </CollectionLink>
+        </CollectionMaybeLink>
       </ResponsiveContainer>
     </Tooltip>
   );

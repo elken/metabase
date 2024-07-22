@@ -5,6 +5,7 @@ import { getPositiveIntegerSchema } from "metabase/admin/performance/constants/c
 import type { StrategyData } from "metabase/admin/performance/types";
 import { defaultCron } from "metabase/admin/performance/utils";
 import { CacheDurationUnit } from "metabase-types/api";
+import type { AdminPath } from "metabase-types/store";
 
 export const durationUnits = new Set(
   Object.values(CacheDurationUnit).map(String),
@@ -40,3 +41,22 @@ export const enterpriseOnlyCachingStrategies: Record<string, StrategyData> = {
     shortLabel: t`Duration`,
   },
 };
+
+export const getEnterprisePerformanceTabMetadata = () =>
+  [
+    {
+      name: t`Database caching settings`,
+      path: "/admin/performance",
+      key: "performance-databases",
+    },
+    {
+      name: t`Dashboard and question caching`,
+      path: "/admin/performance/dashboards-and-questions",
+      key: "performance-dashboards-and-questions",
+    },
+    {
+      name: t`Model persistence`,
+      path: "/admin/performance/models",
+      key: "performance-models",
+    },
+  ] as AdminPath[];

@@ -1,5 +1,15 @@
-import { describeEE, restore, setTokenFeatures } from "e2e/support/helpers";
+import { ORDERS_QUESTION_ID } from "e2e/support/cypress_sample_instance_data";
+import {
+  describeEE,
+  restore,
+  setTokenFeatures,
+  visitQuestion,
+} from "e2e/support/helpers";
 
+import {
+  interceptPerformanceRoutes,
+  visitDashboardAndQuestionCachingTab,
+} from "./helpers/e2e-performance-helpers";
 import {
   adaptiveRadioButton,
   dontCacheResultsRadioButton,
@@ -11,18 +21,14 @@ import {
   openStrategyFormForDatabaseOrDefaultPolicy,
   saveCacheStrategyForm,
   cacheStrategyRadioButton,
+  openSidebarCacheStrategyForm,
 } from "./helpers/e2e-strategy-form-helpers";
 
-// NOTE: These tests just check that the form can be saved. They do not test
-// whether the cache is actually invalidated at the specified times.
-
+/** NOTE: These do not test whether caches are actually invalidated at the specified times. */
 describe("scenarios > admin > performance", { tags: "@OSS" }, () => {
   beforeEach(() => {
     restore();
-    cy.intercept("PUT", "/api/cache").as("putCacheConfig");
-    cy.intercept("DELETE", "/api/cache").as("deleteCacheConfig");
-    cy.intercept("POST", "/api/persist/enable").as("enablePersistence");
-    cy.intercept("POST", "/api/persist/disable").as("disablePersistence");
+    interceptPerformanceRoutes();
     cy.signInAsAdmin();
 
     cy.visit("/admin");
@@ -110,17 +116,11 @@ describe("scenarios > admin > performance", { tags: "@OSS" }, () => {
   });
 });
 
+/** NOTE: These do not test whether caches are actually invalidated at the specified times. */
 describeEE("EE", () => {
   beforeEach(() => {
     restore();
-    cy.intercept("PUT", "/api/cache").as("putCacheConfig");
-    cy.intercept("DELETE", "/api/cache").as("deleteCacheConfig");
-    cy.intercept(
-      "POST",
-      "/api/cache/invalidate?include=overrides&database=1",
-    ).as("invalidateCacheForSampleDatabase");
-    cy.intercept("POST", "/api/persist/enable").as("enablePersistence");
-    cy.intercept("POST", "/api/persist/disable").as("disablePersistence");
+    interceptPerformanceRoutes();
     cy.signInAsAdmin();
     setTokenFeatures("all");
   });
@@ -357,5 +357,32 @@ describeEE("EE", () => {
         });
       });
     });
+  });
+
+  it("can configure Sample Database on Dashboard and question caching tab", () => {
+    interceptPerformanceRoutes();
+    visitDashboardAndQuestionCachingTab();
+    const table = () =>
+      cy.findByRole("table", {
+        name: /Here are the dashboards and questions/,
+      });
+    table()
+      .should("be.visible")
+      .contains(
+        "No dashboards or questions have their own caching policies yet.",
+      );
+    visitQuestion(ORDERS_QUESTION_ID);
+    openSidebarCacheStrategyForm();
+    durationRadioButton().click();
+    cy.findByLabelText(/Cache results for this many hours/).type("99");
+    saveCacheStrategyForm({ strategyType: "duration", model: "database" });
+    visitDashboardAndQuestionCachingTab();
+    table()
+      .contains("Duration: 99h")
+      .within(() => {
+        cy.findByText("Duration: 99h").click();
+      });
+    adaptiveRadioButton().click();
+    saveCacheStrategyForm({ strategyType: "ttl", model: "database" });
   });
 });
