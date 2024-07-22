@@ -200,7 +200,7 @@ describeEE(
      * so it's easier to tell when an adaptive strategy has overridden a duration strategy -
      * you can just check that cache is invalidated after a few seconds.
      */
-    it("dashboard's adaptive strategy can override question's duration strategy", () => {
+    it.only("dashboard's adaptive strategy can override question's duration strategy", () => {
       const { reload: reloadDashboard, visitItem: visitDashboard } =
         setupDashboardTest(sampleDashboard, sampleQuestion);
 
@@ -235,6 +235,7 @@ describeEE(
           questionRuntime,
         }).as("cacheDuration");
       });
+      // FIXME: Stop the clock before caching so we don't have to worry about the amount of time it takes to reload the page (the "clock drift")
 
       cy.then(function () {
         expect(this.freshResult.length).to.eq(32);
