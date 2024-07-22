@@ -198,3 +198,39 @@
             (doseq [limit (range 1 5)
                     [offset v] (map-indexed vector (partition limit 1 (map str "ABCDEFGH")))]
               (is (= v (get-names-page limit offset))))))))))
+
+(deftest stale-items-can-be-archived
+  (mt/with-premium-features #{:stale}
+    (testing "I can archive stale items"
+      (with-collection-hierarchy [{:keys [a b]}]
+        (stale.test/with-stale-items [:model/Card _ {:collection_id (:id a)}
+                                      :model/Dashboard _ {:collection_id (:id a)}
+
+                                      :model/Card _ {:collection_id (:id b)}
+                                      :model/Dashboard _ {:collection_id (:id b)}]
+          (is (= 2 (:total (mt/user-http-request :crowberto :get 200 (str "collection/" (u/the-id a) "/stale")))))
+          (is (= 4 (:total (mt/user-http-request :crowberto :get 200 (str "collection/" (u/the-id a) "/stale")
+                                                 :is_recursive true))))
+
+          (is (= 2 (:total (mt/user-http-request :crowberto :post 200 (str "collection/" (u/the-id a) "/stale/trash")))))
+
+          (is (= 0 (:total (mt/user-http-request :crowberto :get 200 (str "collection/" (u/the-id a) "/stale")))))
+          (is (= 2 (:total (mt/user-http-request :crowberto :get 200 (str "collection/" (u/the-id a) "/stale")
+                                                 :is_recursive true)))))))
+    (testing "I can archive stale items recursively"
+      (with-collection-hierarchy [{:keys [a b]}]
+        (stale.test/with-stale-items [:model/Card _ {:collection_id (:id a)}
+                                      :model/Dashboard _ {:collection_id (:id a)}
+
+                                      :model/Card _ {:collection_id (:id b)}
+                                      :model/Dashboard _ {:collection_id (:id b)}]
+          (is (= 2 (:total (mt/user-http-request :crowberto :get 200 (str "collection/" (u/the-id a) "/stale")))))
+          (is (= 4 (:total (mt/user-http-request :crowberto :get 200 (str "collection/" (u/the-id a) "/stale")
+                                                 :is_recursive true))))
+
+          (is (= 4 (:total (mt/user-http-request :crowberto :post 200 (str "collection/" (u/the-id a) "/stale/trash")
+                                                 :is_recursive true))))
+
+          (is (= 0 (:total (mt/user-http-request :crowberto :get 200 (str "collection/" (u/the-id a) "/stale")))))
+          (is (= 0 (:total (mt/user-http-request :crowberto :get 200 (str "collection/" (u/the-id a) "/stale")
+                                                 :is_recursive true)))))))))
