@@ -825,7 +825,7 @@
   [_model-name]
   {:copy [:archived :archived_directly :collection_position :collection_preview :created_at :description :display
           :embedding_params :enable_embedding :entity_id :metabase_version :public_uuid :query_type :type :name]
-   :skip [ ;; always instance-specific
+   :skip [;; always instance-specific
           :id :updated_at
           ;; cache invalidation is instance-specific
           :cache_invalidated_at
@@ -836,12 +836,9 @@
           ;; this column is not used anymore
           :cache_ttl]
    :transform
-   {:database_id            [#(serdes/*export-fk-keyed* % 'Database :name)
-                             #(serdes/*import-fk-keyed* % 'Database :name)]
-    :table_id               [serdes/*export-table-fk*
-                             serdes/*import-table-fk*]
-    :collection_id          [#(serdes/*export-fk* % 'Collection)
-                             #(serdes/*import-fk* % 'Collection)]
+   {:database_id            (serdes/fk :model/Database :name)
+    :table_id               (serdes/fk :model/Table)
+    :collection_id          (serdes/fk :model/Collection)
     :creator_id             [serdes/*export-user*
                              serdes/*import-user*]
     :made_public_by_id      [serdes/*export-user*
