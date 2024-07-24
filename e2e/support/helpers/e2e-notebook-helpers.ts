@@ -11,7 +11,10 @@ import type { NotebookStepType } from "metabase/query_builder/components/noteboo
  * Switch to a notebook editor from a simple query view (aka "chill mode").
  */
 export function openNotebook() {
-  return cy.findByTestId("qb-header-action-panel").icon("notebook").click();
+  return cy
+    .findByTestId("qb-header-action-panel")
+    .findByTestId("notebook-button")
+    .click();
 }
 
 /**
