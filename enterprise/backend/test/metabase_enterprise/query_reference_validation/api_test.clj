@@ -7,6 +7,7 @@
    [metabase.query-analysis :as query-analysis]
    [metabase.test :as mt]
    [ring.util.codec :as codec]
+   [toucan2.core :as t2]
    [toucan2.tools.with-temp :as t2.with-temp]))
 
 (defn- do-with-test-setup [f]
@@ -154,6 +155,29 @@
 (defmethod assert-expr 'qv= [message [_ expected actual unexpected]]
   `(do-report
     (qv=-report ~message ~expected ~actual ~unexpected)))
+
+(deftest collection-ancestors-test
+  (testing "The response includes collection ancestors"
+    (with-test-setup
+      (is (= [{:collection {:id nil
+                            :name nil
+                            :authority_level nil
+                            :type nil
+                            :effective_ancestors []}}
+              {:collection {:id coll-2
+                            :name (t2/select-one-fn :name :model/Collection :id coll-2)
+                            :authority_level nil
+                            :type nil
+                            :effective_ancestors []}}
+              {:collection {:id coll-3
+                            :name (t2/select-one-fn :name :model/Collection :id coll-3)
+                            :authority_level nil
+                            :type nil
+                            :effective_ancestors [{:id coll-2
+                                                   :name (t2/select-one-fn :name :model/Collection :id coll-2)
+                                                   :authority_level nil
+                                                   :type nil}]}}]
+             (map #(select-keys % [:collection]) (:data (get!))))))))
 
 (deftest list-invalid-cards-basic-test
   (testing "Only returns cards with problematic field refs"
