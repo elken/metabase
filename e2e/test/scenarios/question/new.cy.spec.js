@@ -28,6 +28,7 @@ import {
   tableHeaderClick,
   onlyOnOSS,
   createQuestion,
+  openNotebook,
 } from "e2e/support/helpers";
 
 const { ORDERS, ORDERS_ID } = SAMPLE_DATABASE;
@@ -100,7 +101,7 @@ describe("scenarios > question > new", () => {
       // eslint-disable-next-line no-unscoped-text-selectors -- deprecated usage
       cy.findByText("18,760");
       // should reopen saved question picker after returning back to editor mode
-      cy.icon("notebook").click();
+      openNotebook();
       cy.findByTestId("data-step-cell").contains("Orders, Count").click();
       entityPickerModal().within(() => {
         // It is now possible to choose another saved question
