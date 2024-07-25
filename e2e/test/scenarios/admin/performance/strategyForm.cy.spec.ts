@@ -188,7 +188,7 @@ describeEE("EE", () => {
       cy.log("Set Sample Database to Duration first");
       durationRadioButton().click();
       saveCacheStrategyForm();
-      formLauncher("Sample Database", "currently", "Duration");
+      formLauncher("Sample Database", "currently", "Duration: 24h");
 
       cy.log("Then configure Sample Database to use the default policy");
       useDefaultRadioButton().click();
@@ -211,7 +211,7 @@ describeEE("EE", () => {
       cy.log(`Set ${itemName} to Duration first`);
       durationRadioButton().click();
       saveCacheStrategyForm();
-      formLauncher(itemName, "currently", "Duration");
+      formLauncher(itemName, "currently", "Duration: 24h");
 
       cy.log(`Then set ${itemName} to Don't cache results`);
       dontCacheResultsRadioButton().click();
@@ -229,7 +229,7 @@ describeEE("EE", () => {
       durationRadioButton().click();
       saveCacheStrategyForm();
       cy.log(`${itemName} is now set to Duration`);
-      formLauncher(itemName, "currently", "Duration");
+      formLauncher(itemName, "currently", "Duration: 24h");
       checkInheritanceIfNeeded(itemName, "Duration");
     });
 
