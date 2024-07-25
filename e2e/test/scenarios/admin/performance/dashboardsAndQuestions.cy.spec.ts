@@ -200,7 +200,7 @@ describeEE(
      * so it's easier to tell when an adaptive strategy has overridden a duration strategy -
      * you can just check that cache is invalidated after a few seconds.
      */
-    it.only("dashboard's adaptive strategy can override question's duration strategy", () => {
+    it("dashboard's adaptive strategy can override question's duration strategy", () => {
       const { reload: reloadDashboard, visitItem: visitDashboard } =
         setupDashboardTest(sampleDashboard, sampleQuestion);
 

@@ -23,8 +23,6 @@ export const setupCachingTests = () => {
   restore("postgres-12");
   cy.signInAsAdmin();
   setTokenFeatures("all");
-  // Enable query caching because the BE still checks this setting
-  cy.request("PUT", "/api/setting/enable-query-caching", { value: true });
 };
 
 export const setupQuestionTest = (
