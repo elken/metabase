@@ -116,7 +116,8 @@ describeWithSnowplowEE(
 
         expectGoodSnowplowEvent({
           event: "download_results_clicked",
-          resource_type: "static-embed-dashcard",
+          resource_type: "dashcard",
+          accessed_via: "static-embed",
           export_type: "csv",
         });
       });
@@ -176,7 +177,8 @@ describeWithSnowplowEE(
 
         expectGoodSnowplowEvent({
           event: "download_results_clicked",
-          resource_type: "static-embed-question",
+          resource_type: "question",
+          accessed_via: "static-embed",
           export_type: "png",
         });
       });
@@ -204,7 +206,8 @@ describeWithSnowplowEE(
 
         expectGoodSnowplowEvent({
           event: "download_results_clicked",
-          resource_type: "static-embed-question",
+          resource_type: "question",
+          accessed_via: "static-embed",
           export_type: "csv",
         });
       });
