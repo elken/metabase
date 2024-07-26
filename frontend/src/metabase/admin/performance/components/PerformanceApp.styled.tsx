@@ -40,6 +40,6 @@ export const TabsPanel = styled(Tabs.Panel)<{ value: string }>`
 
 export const TabBody = styled(Flex)`
   flex: 1;
-  background-color: color("bg-light");
+  background-color: var(--mb-color-bg-light);
   height: 100%;
 `;
