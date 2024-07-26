@@ -134,29 +134,31 @@ const ViewFooter = ({
             question,
             visualizationSettings,
           }) && (
-            <QuestionAlertWidget
-              key="alerts"
-              className={cx(CS.hide, CS.smShow)}
-              canManageSubscriptions={canManageSubscriptions}
-              question={question}
-              questionAlerts={questionAlerts}
-              onCreateAlert={() =>
-                question.isSaved()
-                  ? onOpenModal("create-alert")
-                  : onOpenModal("save-question-before-alert")
-              }
-            />
+            // <QuestionAlertWidget
+            //   key="alerts"
+            //   className={cx(CS.hide, CS.smShow)}
+            //   canManageSubscriptions={canManageSubscriptions}
+            //   question={question}
+            //   questionAlerts={questionAlerts}
+            //   onCreateAlert={() =>
+            //     question.isSaved()
+            //       ? onOpenModal("create-alert")
+            //       : onOpenModal("save-question-before-alert")
+            //   }
+            // />
+            <div>FIXME</div>
           ),
           type === "question" &&
             !question.isArchived() &&
             (question.isSaved() ? (
-              <EmbedMenu
-                key="embed"
-                resource={question}
-                resourceType="question"
-                hasPublicLink={!!question.publicUUID()}
-                onModalOpen={() => onOpenModal(MODAL_TYPES.EMBED)}
-              />
+              // <EmbedMenu
+              //   key="embed"
+              //   resource={question}
+              //   resourceType="question"
+              //   hasPublicLink={!!question.publicUUID()}
+              //   onModalOpen={() => onOpenModal(MODAL_TYPES.EMBED)}
+              // />
+              <div>FIXME</div>
             ) : (
               <ResourceEmbedButton
                 hasBackground={false}

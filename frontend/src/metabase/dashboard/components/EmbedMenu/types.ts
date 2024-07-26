@@ -20,5 +20,4 @@ export type ResourceType =
 
 export type EmbedMenuProps = ResourceType & {
   hasPublicLink: boolean;
-  onModalOpen: () => void;
 };
