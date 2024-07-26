@@ -296,7 +296,7 @@ const TableSkeleton = ({ columns }: { columns: ColumnItem[] }) => (
 
 const EmptyTable = () => (
   <tr>
-    <td colSpan={2}>
+    <td colSpan={3}>
       <Center fw="bold" c="text-light">
         {t`No dashboards or questions have their own caching policies yet.`}
       </Center>
