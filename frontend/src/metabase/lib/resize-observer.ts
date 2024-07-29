@@ -7,9 +7,11 @@ function createResizeObserver() {
   const callbacksMap: Map<unknown, ResizeObserverCallback[]> = new Map();
 
   function handler(entries: ResizeObserverEntry[], observer: ResizeObserver) {
-    entries.forEach(entry => {
-      const entryCallbacks = callbacksMap.get(entry.target);
-      entryCallbacks?.forEach(callback => callback(entry, observer));
+    window.requestAnimationFrame(() => {
+      entries.forEach(entry => {
+        const entryCallbacks = callbacksMap.get(entry.target);
+        entryCallbacks?.forEach(callback => callback(entry, observer));
+      });
     });
   }
 
